@@ -2,18 +2,22 @@ import requests
 import json
 
 def main():
-    print("Hello world")
     shop_id = "akizuki"     #akizuki,eleshop,sengoku が選択できる
-    model_number = 114961
+    model_number = 116108
 
-    get(shop_id,model_number)
+    res = get_res(shop_id,model_number)
+    price = str(get_price(res))+"円"
+    print(price)
 
-def get(shop_id,model_number):
+def get_res(shop_id,model_number):
     url = f"https://api.partscabi.net/v1/shop/{shop_id}/component/{model_number}/"
     res = requests.get(url)
-    name = res.json()["prices"][0]["value"]
-    print(name)
-    
+    print(res.json())
+    return res
+
+def get_price(res):
+    price = res.json()["prices"][0]["value"]
+    return price
 
 
 
