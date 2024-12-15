@@ -9,28 +9,41 @@ def main():
 
     res = get_res(shop_id,model_number)
 
-    name = get_name(res)
-    price = get_price(res)
-    subtotal = price * model_count
-    price_str = "￥"+str(get_price(res))
-    subtotal_str = "￥"+str(price * model_count)
-    url = get_url(res)
-    place = get_place(res)
+    if res != "エラー":
+        name = get_name(res)
+        price = get_price(res)
+        url = get_url(res)
+        place = get_place(res)
 
-    print(model_number)
-    print(name)
-    print(price_str)
-    print(model_count)
-    print(subtotal_str)
-    print(shop)
-    print(url)
-    print(place)
+        subtotal = price * model_count
+        price_str = "￥"+str(get_price(res))
+        subtotal_str = "￥"+str(price * model_count)
+
+        print(model_number)
+        print(name)
+        print(price_str)
+        print(model_count)
+        print(subtotal_str)
+        print(shop)
+        print(url)
+        print(place)
+    else:
+        print("この販売コードの商品は存在しない、もしくはWiFiに接続出来ていません")
 
 def get_res(shop_id,model_number):
     url = f"https://api.partscabi.net/v1/shop/{shop_id}/component/{model_number}/"
-    res = requests.get(url)
-    #print(res.json())
-    return res
+
+    try:
+        res = requests.get(url)
+        res.raise_for_status()
+        return res
+    except ConnectionError as ce:
+        print(f"WiFi接続エラー: {ce}")
+        return "エラー"   #後で直す
+    except requests.RequestException as re:
+        print(f"リクエストエラー: {re}")
+        return "エラー"
+
 
 def get_name(res):
     name = res.json()["name"]
