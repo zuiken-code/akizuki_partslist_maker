@@ -14,18 +14,22 @@ def main():
     subtotal = price * model_count
     price_str = "￥"+str(get_price(res))
     subtotal_str = "￥"+str(price * model_count)
-    shop = "秋月電子通商"
     url = get_url(res)
-    
+    place = get_place(res)
+
+    print(model_number)
     print(name)
     print(price_str)
+    print(model_count)
     print(subtotal_str)
+    print(shop)
     print(url)
+    print(place)
 
 def get_res(shop_id,model_number):
     url = f"https://api.partscabi.net/v1/shop/{shop_id}/component/{model_number}/"
     res = requests.get(url)
-    print(res.json())
+    #print(res.json())
     return res
 
 def get_name(res):
@@ -40,6 +44,9 @@ def get_url(res):
     url = res.json()["link"]
     return url
 
+def get_place(res):
+    place = res.json()["stores"][0]["place"]
+    return place
 
 
 
